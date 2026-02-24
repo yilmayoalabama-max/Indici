@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduSpark — School-Verified AI Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#07050f;
+  --s1:#0e0a1a;
+  --s2:#120d20;
+  --y:#7c3aed;
+  --yg:rgba(124,58,237,0.12);
+  --c:#00e5ff;
+  --r:#ff3b5c;
+  --border:rgba(255,255,255,0.06);
+  --yb:rgba(124,58,237,0.2);
+  --txt:#ede8ff;
+  --mu:rgba(220,210,255,0.42);
+  --fd:'Syne',sans-serif;
+  --fb:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:var(--fb);background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgba(88,28,220,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(60,10,180,0.06) 0%,transparent 50%);color:var(--txt);min-height:100vh;overflow-x:hidden;cursor:none;}
+a,button{cursor:none;}
+/* scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.28);border-radius:2px;}
+/* cursor */
+#cr{position:fixed;width:8px;height:8px;background:var(--y);opacity:0.85;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width 0.15s,height 0.15s;}
+#cr2{position:fixed;width:32px;height:32px;border:1px solid rgba(124,58,237,0.42);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);}
+/* scroll progress */
+#sp{position:fixed;top:0;left:0;height:2px;background:var(--y);z-index:300;width:0%;box-shadow:0 0 14px rgba(124,58,237,0.8);transition:width 0.08s;}
+/* speed canvas */
+#vc{position:fixed;inset:0;pointer-events:none;z-index:1;}
+/* --- NAV --- */
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:64px;background:rgba(7,5,15,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+.lm{width:30px;height:30px;background:var(--y);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:12px;color:#f0e8ff;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);}
+.logo:hover .lm{transform:rotate(-10deg) scale(1.12);}
+.ln{font-family:var(--fd);font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+.ln span{color:var(--y);}
+.nl{display:flex;align-items:center;gap:34px;}
+.nl a{font-size:13px;font-weight:500;color:var(--mu);text-decoration:none;position:relative;transition:color 0.2s;}
+.nl a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--y);transition:width 0.3s cubic-bezier(.22,1,.36,1);}
+.nl a:hover{color:var(--txt);}
+.nl a:hover::after{width:100%;}
+.nr{display:flex;gap:9px;}
+.bg{padding:8px 17px;border-radius:8px;font-size:13px;font-weight:500;background:none;border:1px solid var(--border);color:var(--mu);font-family:var(--fb);transition:all 0.2s;}
+.bg:hover{border-color:var(--yb);color:var(--txt);}
+.ba{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;background:var(--y);border:none;color:#f0e8ff;font-family:var(--fd);transition:all 0.25s cubic-bezier(.22,1,.36,1);letter-spacing:0.01em;position:relative;overflow:hidden;}
+.ba::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.18);transform:translateX(-110%);transition:transform 0.4s;}
+.ba:hover{box-shadow:0 6px 24px rgba(124,58,237,0.35);transform:translateY(-1px);}
+.ba:hover::after{transform:translateX(110%);}
+/* pages */
+.page{display:none;}.page.active{display:block;}
+.fp{display:none;flex-direction:row;min-height:calc(100vh - 64px);}.fp.active{display:flex;}
+/* toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(7,5,15,0.97);border:1px solid var(--yb);border-radius:8px;padding:11px 22px;display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;z-index:9999;pointer-events:none;opacity:0;transition:all 0.35s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.td{width:5px;height:5px;border-radius:50%;background:var(--y);box-shadow:0 0 6px var(--y);}
+
+/* ===================== LANDING ===================== */
+/* HERO */
+.hero{min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(124,58,237,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,0.05) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 40%,black 10%,transparent 68%);pointer-events:none;}
+.hero-glow{position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(124,58,237,0.09) 0%,transparent 65%);pointer-events:none;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(124,58,237,0.3);background:rgba(124,58,237,0.07);border-radius:5px;padding:5px 14px;font-size:10px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--y);margin-bottom:30px;animation:fup 0.7s ease both;position:relative;z-index:2;}
+.edot{width:5px;height:5px;border-radius:50%;background:var(--y);box-shadow:0 0 8px var(--y);animation:blink 2s infinite;}
+.hero h1{font-family:var(--fd);font-size:clamp(48px,8.5vw,92px);font-weight:800;line-height:0.94;letter-spacing:-0.045em;margin-bottom:24px;position:relative;z-index:2;animation:fup 0.75s 0.08s ease both;}
+.hero h1 .yl{color:var(--y);}
+.hero h1 .dim{color:rgba(238,240,255,0.18);}
+.hero h1 .line{display:block;overflow:hidden;}
+.hero h1 .line>span{display:inline-block;animation:slin 0.85s cubic-bezier(.22,1,.36,1) both;}
+.hero h1 .line:nth-child(1)>span{animation-delay:0.1s;}
+.hero h1 .line:nth-child(2)>span{animation-delay:0.22s;}
+.hero h1 .line:nth-child(3)>span{animation-delay:0.34s;}
+.hero-sub{font-size:16px;color:var(--mu);max-width:520px;line-height:1.72;margin-bottom:36px;position:relative;z-index:2;animation:fup 0.75s 0.38s ease both;}
+.hero-cta{display:flex;gap:11px;margin-bottom:50px;position:relative;z-index:2;animation:fup 0.75s 0.48s ease both;}
+.bbig{padding:15px 38px;border-radius:10px;font-size:15px;font-weight:700;background:var(--y);border:none;color:#f0e8ff;font-family:var(--fd);transition:all 0.3s cubic-bezier(.22,1,.36,1);letter-spacing:0.01em;position:relative;overflow:hidden;}
+.bbig::before{content:'→';position:absolute;right:-18px;top:50%;transform:translateY(-50%);font-size:16px;transition:right 0.3s cubic-bezier(.22,1,.36,1);}
+.bbig:hover{padding-right:52px;box-shadow:0 12px 40px rgba(124,58,237,0.38);transform:translateY(-2px);}
+.bbig:hover::before{right:17px;}
+.bbig-o{padding:15px 38px;border-radius:10px;font-size:15px;font-weight:500;background:none;border:1px solid var(--border);color:var(--mu);font-family:var(--fb);transition:all 0.25s;}
+.bbig-o:hover{border-color:var(--yb);color:var(--txt);transform:translateY(-1px);}
+/* exam pills */
+.exam-pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:58px;position:relative;z-index:2;animation:fup 0.75s 0.58s ease both;}
+.ep{padding:6px 15px;border-radius:5px;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:0.07em;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--mu);transition:all 0.22s cubic-bezier(.22,1,.36,1);}
+.ep:hover,.ep.on{border-color:rgba(124,58,237,0.55);background:var(--yg);color:var(--y);transform:translateY(-2px);}
+/* stats */
+.stats-row{display:flex;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;z-index:2;animation:fup 0.75s 0.68s ease both;}
+.st{padding:20px 38px;text-align:center;border-right:1px solid var(--border);transition:background 0.2s;}
+.st:hover{background:rgba(124,58,237,0.07);}
+.st:last-child{border-right:none;}
+.stn{font-family:var(--fd);font-size:26px;font-weight:800;color:var(--y);letter-spacing:-0.03em;}
+.stl{font-size:11px;color:var(--mu);margin-top:3px;letter-spacing:0.04em;}
+
+/* TICKER */
+.ticker{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:11px 0;background:rgba(124,58,237,0.04);}
+.tinner{display:flex;width:max-content;animation:tick 30s linear infinite;gap:0;}
+.tinner:hover{animation-play-state:paused;}
+.ti{display:flex;align-items:center;gap:11px;padding:0 26px;font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--mu);}
+.tsep{width:3px;height:3px;border-radius:50%;background:var(--y);opacity:0.45;}
+
+/* PARALLAX BIG TEXT */
+.par-wrap{overflow:hidden;padding:26px 0;pointer-events:none;user-select:none;}
+.par-txt{font-family:var(--fd);font-size:clamp(72px,13vw,155px);font-weight:800;letter-spacing:-0.05em;white-space:nowrap;opacity:0.022;color:#fff;will-change:transform;}
+
+/* HOW IT WORKS — 3-column with connecting line */
+.how-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(11,14,26,0.6);}
+.how-section{padding:80px 52px;max-width:1200px;margin:0 auto;}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;}
+.how-grid::before{content:'';position:absolute;top:28px;left:calc(16.6% + 20px);right:calc(16.6% + 20px);height:1px;background:linear-gradient(90deg,var(--y),var(--c),var(--y));opacity:0.15;}
+.how-card{padding:32px 28px;position:relative;border-right:1px solid var(--border);}
+.how-card:last-child{border-right:none;}
+.how-num{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--y);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.how-num::before{content:'';display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--y);color:#f0e8ff;font-size:10px;text-align:center;line-height:22px;}
+.how-card:nth-child(1) .how-num::before{content:'1';}
+.how-card:nth-child(2) .how-num::before{content:'2';}
+.how-card:nth-child(3) .how-num::before{content:'3';}
+.how-card h3{font-family:var(--fd);font-size:18px;font-weight:800;margin-bottom:10px;letter-spacing:-0.02em;}
+.how-card p{font-size:13px;color:var(--mu);line-height:1.75;}
+.how-tag{display:inline-block;margin-top:14px;padding:4px 11px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}
+
+/* EXAMS SECTION */
+.sec{padding:80px 52px;max-width:1200px;margin:0 auto;}
+.se{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--y);margin-bottom:10px;}
+.st2{font-family:var(--fd);font-size:clamp(30px,4vw,50px);font-weight:800;letter-spacing:-0.04em;line-height:1.04;margin-bottom:14px;}
+.ssub{font-size:15px;color:var(--mu);line-height:1.72;max-width:500px;margin-bottom:50px;}
+
+/* exam grid */
+.egrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.ec{position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:all 0.4s cubic-bezier(.22,1,.36,1);}
+.ec:hover{transform:translateY(-7px);border-color:rgba(124,58,237,0.28);box-shadow:0 24px 64px rgba(0,0,0,0.45);}
+.ec::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.4s;border-radius:16px;}
+.ec:nth-child(1)::before{background:radial-gradient(circle at 50% 0,rgba(124,58,237,0.1) 0,transparent 68%);}
+.ec:nth-child(2)::before{background:radial-gradient(circle at 50% 0,rgba(0,229,255,0.07) 0,transparent 68%);}
+.ec:nth-child(3)::before{background:radial-gradient(circle at 50% 0,rgba(255,59,92,0.07) 0,transparent 68%);}
+.ec:nth-child(4)::before{background:radial-gradient(circle at 50% 0,rgba(157,78,221,0.07) 0,transparent 68%);}
+.ec:nth-child(5)::before{background:radial-gradient(circle at 50% 0,rgba(0,229,255,0.07) 0,transparent 68%);}
+.ec:nth-child(6)::before{background:radial-gradient(circle at 50% 0,rgba(255,180,0,0.07) 0,transparent 68%);}
+.ec:nth-child(7)::before{background:radial-gradient(circle at 50% 0,rgba(57,255,77,0.07) 0,transparent 68%);}
+.ec:nth-child(8)::before{background:radial-gradient(circle at 50% 0,rgba(255,59,92,0.07) 0,transparent 68%);}
+.ec:hover::before{opacity:1;}
+.ec-ic{font-size:26px;margin-bottom:16px;display:block;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);}
+.ec:hover .ec-ic{transform:scale(1.15) rotate(-6deg);}
+.ec-badge{display:inline-block;font-family:var(--fd);font-size:10px;font-weight:800;letter-spacing:0.1em;padding:3px 10px;border-radius:4px;margin-bottom:14px;}
+.ec-title{font-family:var(--fd);font-size:20px;font-weight:800;margin-bottom:5px;letter-spacing:-0.02em;}
+.ec-full{font-size:12px;color:var(--mu);margin-bottom:14px;line-height:1.5;}
+.ec-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.ec-tag{font-size:10px;font-weight:500;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.04);color:var(--mu);}
+.ec-n{position:absolute;bottom:12px;right:16px;font-family:var(--fd);font-size:54px;font-weight:800;opacity:0.04;letter-spacing:-0.05em;line-height:1;transition:opacity 0.3s,transform 0.3s;}
+.ec:hover .ec-n{opacity:0.09;transform:scale(1.08);}
+
+/* WHY SECTION */
+.wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+.wc{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all 0.38s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;}
+.wc:hover{border-color:rgba(124,58,237,0.28);transform:translateY(-5px) scale(1.01);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.wc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.6),transparent);opacity:0;transition:opacity 0.3s;}
+.wc:hover::after{opacity:1;}
+.wi{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:18px;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);}
+.wc:hover .wi{transform:scale(1.15) rotate(-6deg);}
+.wc h3{font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-0.02em;}
+.wc p{font-size:13px;color:var(--mu);line-height:1.78;}
+
+/* SCHOOL PARTNER SECTION */
+.school-band{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(11,14,26,0.7);}
+.school-inner{padding:80px 52px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+.school-left h2{font-family:var(--fd);font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.04em;line-height:1.05;margin-bottom:18px;}
+.school-left p{font-size:15px;color:var(--mu);line-height:1.75;margin-bottom:26px;}
+.school-left .school-note{font-size:12px;color:rgba(124,58,237,0.6);font-style:italic;display:flex;align-items:center;gap:7px;}
+.school-left .school-note::before{content:'🔒';font-style:normal;}
+/* trust flow visual */
+.trust-flow{display:flex;flex-direction:column;gap:0;}
+.tf-step{display:flex;align-items:flex-start;gap:16px;padding:20px 22px;border-radius:12px;transition:background 0.2s;}
+.tf-step:hover{background:rgba(124,58,237,0.07);}
+.tf-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.tf-connector{width:1px;height:22px;background:linear-gradient(to bottom,var(--yb),transparent);margin-left:19px;}
+.tf-title{font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px;letter-spacing:-0.01em;}
+.tf-desc{font-size:13px;color:var(--mu);line-height:1.65;}
+/* verified badge */
+.vbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--y);letter-spacing:0.08em;margin-top:20px;}
+.vbadge::before{content:'✓';width:16px;height:16px;background:var(--y);color:#f0e8ff;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;}
+
+/* HORIZONTAL SCROLL CARDS */
+.hs-wrap{overflow:hidden;padding:10px 0;}
+.hs-track{display:flex;gap:14px;padding:4px 52px;animation:hscr 40s linear infinite;width:max-content;}
+.hs-track:hover{animation-play-state:paused;}
+.hsc{flex-shrink:0;width:230px;background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all 0.3s cubic-bezier(.22,1,.36,1);}
+.hsc:hover{border-color:var(--yb);transform:translateY(-4px);}
+.hsc-exam{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:0.15em;color:var(--y);margin-bottom:5px;}
+.hsc-school{font-size:11px;color:var(--mu);margin-bottom:4px;}
+.hsc-name{font-size:14px;font-weight:600;margin-bottom:10px;}
+.hsc-score{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--y);}
+
+/* CTA */
+.cta-band{padding:100px 52px;text-align:center;position:relative;overflow:hidden;}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(124,58,237,0.1) 0%,transparent 60%);}
+.cta-band::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:80px;background:linear-gradient(to bottom,transparent,rgba(124,58,237,0.42));}
+.cta-band h2{font-family:var(--fd);font-size:clamp(34px,6vw,64px);font-weight:800;letter-spacing:-0.04em;margin-bottom:14px;position:relative;z-index:2;}
+.cta-band p{font-size:16px;color:var(--mu);max-width:480px;margin:0 auto 36px;line-height:1.72;position:relative;z-index:2;}
+.cta-school-note{font-size:12px;color:rgba(238,240,255,0.2);margin-top:14px;font-weight:500;letter-spacing:0.05em;position:relative;z-index:2;}
+
+/* REVEAL SYSTEM */
+.rv{opacity:0;transform:translateY(42px);transition:opacity 0.72s cubic-bezier(.22,1,.36,1),transform 0.72s cubic-bezier(.22,1,.36,1);}
+.rv.in{opacity:1;transform:none;}
+.rvl{opacity:0;transform:translateX(-48px);transition:opacity 0.7s cubic-bezier(.22,1,.36,1),transform 0.7s cubic-bezier(.22,1,.36,1);}
+.rvl.in{opacity:1;transform:none;}
+.rvr{opacity:0;transform:translateX(48px);transition:opacity 0.7s cubic-bezier(.22,1,.36,1),transform 0.7s cubic-bezier(.22,1,.36,1);}
+.rvr.in{opacity:1;transform:none;}
+.stg>*{opacity:0;transform:translateY(28px);transition:opacity 0.55s cubic-bezier(.22,1,.36,1),transform 0.55s cubic-bezier(.22,1,.36,1);}
+.stg.in>*:nth-child(1){opacity:1;transform:none;transition-delay:0ms;}
+.stg.in>*:nth-child(2){opacity:1;transform:none;transition-delay:65ms;}
+.stg.in>*:nth-child(3){opacity:1;transform:none;transition-delay:130ms;}
+.stg.in>*:nth-child(4){opacity:1;transform:none;transition-delay:195ms;}
+.stg.in>*:nth-child(5){opacity:1;transform:none;transition-delay:260ms;}
+.stg.in>*:nth-child(6){opacity:1;transform:none;transition-delay:325ms;}
+.stg.in>*:nth-child(7){opacity:1;transform:none;transition-delay:390ms;}
+.stg.in>*:nth-child(8){opacity:1;transform:none;transition-delay:455ms;}
+
+/* ===================== MODAL ===================== */
+.overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.72);backdrop-filter:blur(14px);align-items:center;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:#0c0818;border:1px solid rgba(124,58,237,0.2);border-radius:22px;padding:36px;width:100%;max-width:420px;animation:mpop 0.32s cubic-bezier(.34,1.56,.64,1);position:relative;}
+.mcls{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--mu);font-size:20px;line-height:1;}
+.modal h2{font-family:var(--fd);font-size:22px;font-weight:800;margin-bottom:4px;letter-spacing:-0.03em;}
+.msub{font-size:13px;color:var(--mu);margin-bottom:22px;}
+.mtabs{display:flex;background:rgba(0,0,0,0.35);border-radius:10px;padding:4px;gap:4px;margin-bottom:22px;}
+.mtab{flex:1;padding:9px;border-radius:7px;font-size:12px;font-weight:700;text-align:center;border:none;font-family:var(--fd);background:none;color:var(--mu);transition:all 0.2s;}
+.mtab.active{background:rgba(124,58,237,0.14);color:var(--y);}
+.fld{width:100%;padding:13px 15px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:white;font-family:var(--fb);font-size:14px;outline:none;transition:border 0.2s;margin-bottom:9px;}
+.fld:focus{border-color:rgba(124,58,237,0.45);}
+.fld::placeholder{color:rgba(255,255,255,0.17);}
+.school-verify-note{display:flex;align-items:center;gap:8px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.18);border-radius:9px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:rgba(124,58,237,0.8);line-height:1.5;}
+/* SCHOOL PARTNER MODAL */
+#form-school-partner{display:none;}
+
+/* ===================== SIDEBAR APP ===================== */
+.sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);padding:22px 14px;display:flex;flex-direction:column;gap:4px;background:rgba(9,6,18,0.65);}
+.suser{display:flex;align-items:center;gap:11px;padding:13px;margin-bottom:16px;background:rgba(124,58,237,0.09);border:1px solid rgba(124,58,237,0.14);border-radius:12px;}
+.av{width:36px;height:36px;border-radius:9px;background:var(--y);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:14px;font-weight:800;color:#f0e8ff;flex-shrink:0;}
+.uname{font-family:var(--fd);font-size:13px;font-weight:700;}
+.uinfo{font-size:11px;color:var(--mu);}
+.ni{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:10px;font-size:13px;font-weight:500;color:var(--mu);transition:all 0.18s;border:none;background:none;font-family:var(--fb);text-align:left;width:100%;}
+.ni:hover{background:rgba(255,255,255,0.04);color:var(--txt);}
+.ni.active{background:rgba(124,58,237,0.09);color:var(--y);font-weight:600;}
+.ni-ic{font-size:14px;width:20px;text-align:center;}
+.bdg{margin-left:auto;background:rgba(255,59,92,0.25);color:var(--r);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:700;}
+.nsep{height:1px;background:var(--border);margin:8px 0;}
+/* APP CONTENT */
+.mcont{flex:1;padding:36px;overflow-y:auto;}
+.ph{margin-bottom:28px;}
+.ph .ey{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--y);margin-bottom:6px;}
+.ph h2{font-family:var(--fd);font-size:28px;font-weight:800;letter-spacing:-0.03em;}
+/* AI banner */
+.aib{display:flex;gap:14px;align-items:flex-start;background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.14);border-radius:13px;padding:17px;margin-bottom:24px;}
+.aib-ic{width:34px;height:34px;border-radius:9px;background:rgba(124,58,237,0.14);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.aib-lbl{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--y);margin-bottom:3px;}
+.aib p{font-size:13px;color:rgba(238,240,255,0.48);line-height:1.65;}
+/* subject cards */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.scard{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all 0.2s;}
+.scard:hover{border-color:var(--yb);transform:translateY(-2px);}
+.scard-ic{font-size:24px;margin-bottom:12px;display:block;}
+.scard-n{font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:2px;}
+.scard-exam{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:11px;}
+.bar{background:rgba(255,255,255,0.07);border-radius:3px;height:4px;overflow:hidden;}
+.barf{height:100%;border-radius:3px;}
+.scard-sc{font-size:11px;color:var(--mu);margin-top:5px;font-family:var(--fd);}
+/* quiz */
+.qwrap{max-width:580px;}
+.qpb{height:2px;background:rgba(255,255,255,0.07);border-radius:2px;margin-bottom:28px;overflow:hidden;}
+.qpbf{height:100%;background:linear-gradient(90deg,var(--y),var(--c));transition:width 0.4s;}
+.qtag-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.qbox{background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(0,229,255,0.02));border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:28px;margin-bottom:20px;}
+.qbox p{font-family:var(--fd);font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-0.02em;}
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:13px;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--txt);font-family:var(--fb);font-size:14px;font-weight:500;text-align:left;transition:all 0.15s;}
+.opt:hover{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.3);}
+.opt.cor{background:rgba(57,255,77,0.07);border-color:rgba(57,255,77,0.35);}
+.opt.wrg{background:rgba(255,59,92,0.07);border-color:rgba(255,59,92,0.3);}
+.oltr{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--y);flex-shrink:0;font-family:var(--fd);}
+.rcrd{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:38px;text-align:center;max-width:420px;}
+.scircle{width:94px;height:94px;border-radius:50%;background:var(--y);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;}
+.scn{font-family:var(--fd);font-size:26px;font-weight:800;color:#f0e8ff;}
+.scl{font-size:9px;color:rgba(240,232,255,0.6);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;}
+.rcrd h3{font-family:var(--fd);font-size:22px;font-weight:800;margin-bottom:16px;}
+/* progress */
+.prow{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.plbl{width:56px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--mu);}
+.pbar{flex:1;background:rgba(255,255,255,0.05);border-radius:3px;height:6px;overflow:hidden;}
+.pbarf{height:100%;border-radius:3px;}
+.ppct{width:36px;font-size:12px;font-weight:700;text-align:right;color:var(--mu);font-family:var(--fd);}
+/* teacher */
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.s4{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;}
+.s4n{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-0.02em;}
+.s4l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--mu);margin-top:4px;}
+.atrow{display:flex;align-items:center;gap:13px;background:var(--s1);border:1px solid var(--border);border-radius:13px;padding:15px 18px;margin-bottom:9px;}
+.wtag{background:rgba(255,59,92,0.1);color:var(--r);padding:2px 9px;border-radius:4px;font-size:10px;font-weight:700;}
+.gcrd2{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;}
+.gqcrd{background:rgba(0,0,0,0.22);border:1px solid var(--border);border-radius:12px;padding:17px;margin-bottom:9px;}
+.dtag{padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;}
+.rtable{background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+/* msgs */
+.mc2{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;}
+.mhdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.mname{font-family:var(--fd);font-size:13px;font-weight:700;}
+.mrole{font-size:11px;color:var(--mu);}
+.mtime{font-size:11px;color:rgba(255,255,255,0.18);font-weight:500;}
+.mbody{font-size:13px;color:rgba(238,240,255,0.52);line-height:1.65;}
+.mtag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;margin-top:9px;}
+/* school admin */
+.sadmin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.sadmin-crd{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;}
+.sadn{font-family:var(--fd);font-size:28px;font-weight:800;}
+.sadl{font-size:11px;color:var(--mu);margin-top:4px;font-weight:500;}
+.action-row{display:flex;gap:9px;margin-bottom:22px;}
+.provision-table{background:var(--s1);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.pt-head{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:11px 18px;border-bottom:1px solid var(--border);}
+.pt-head span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--mu);}
+.pt-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,0.03);align-items:center;transition:background 0.15s;}
+.pt-row:hover{background:rgba(124,58,237,0.04);}
+.pt-row:last-child{border-bottom:none;}
+/* keyframes */
+@keyframes fup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slin{from{transform:translateY(105%)}to{transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes hscr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mpop{from{opacity:0;transform:scale(0.92) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="cr"></div>
+<div id="cr2"></div>
+<div id="sp"></div>
+<canvas id="vc"></canvas>
+
+<!-- =========== NAV =========== -->
+<nav id="main-nav">
+  <div class="logo" onclick="showPage('landing')">
+    <div class="lm">ES</div>
+    <div class="ln">Edu<span>Spark</span></div>
+  </div>
+  <div class="nl">
+    <a onclick="showPage('landing')">Home</a>
+    <a onclick="document.getElementById('exams-sec').scrollIntoView({behavior:'smooth'})">Exams</a>
+    <a onclick="document.getElementById('how-sec').scrollIntoView({behavior:'smooth'})">How It Works</a>
+    <a onclick="showPage('app');setS('subjects')">Student</a>
+    <a onclick="showPage('teacher')">Teacher</a>
+    <a onclick="showPage('admin')">School Admin</a>
+  </div>
+  <div class="nr">
+    <button class="bg" onclick="openModal('login')">Log In</button>
+    <button class="ba" onclick="openModal('partner')">Partner with Us</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"><div class="td"></div><span id="tmsg"></span></div>
+
+<!-- =========== MODAL =========== -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="mcls" onclick="closeModal()">✕</button>
+    <h2 id="modal-title">Sign In</h2>
+    <p class="msub" id="modal-sub">Access your EduSpark account</p>
+
+    <!-- login tabs -->
+    <div id="form-login">
+      <div class="mtabs">
+        <button class="mtab active" id="t-s" onclick="swTab('s')">🎒 Student</button>
+        <button class="mtab" id="t-t" onclick="swTab('t')">👩‍🏫 Teacher</button>
+        <button class="mtab" id="t-a" onclick="swTab('a')">🏫 Admin</button>
+      </div>
+      <div id="fs">
+        <div class="school-verify-note">🔒 Only school-issued emails can create accounts. Contact your school to get access.</div>
+        <input class="fld" type="email" placeholder="you@yourschool.edu" value="alex@greenridge.edu"/>
+        <input class="fld" type="password" placeholder="Password" value="••••••••"/>
+        <button class="ba" style="width:100%;padding:14px;font-size:14px;border-radius:10px;margin-top:4px" onclick="doLogin('student')">Sign In →</button>
+        <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.15);margin-top:12px">School-verified access only · Demo: any credentials work</p>
+      </div>
+      <div id="ft" style="display:none">
+        <div class="school-verify-note">🔒 Teacher accounts are provisioned by your school administrator.</div>
+        <input class="fld" type="email" placeholder="teacher@yourschool.edu" value="ms.taylor@greenridge.edu"/>
+        <input class="fld" type="password" placeholder="Password" value="••••••••"/>
+        <button class="ba" style="width:100%;padding:14px;font-size:14px;border-radius:10px;margin-top:4px" onclick="doLogin('teacher')">Sign In →</button>
+      </div>
+      <div id="fa" style="display:none">
+        <div class="school-verify-note">🔒 Admin portals are issued when your school partners with EduSpark.</div>
+        <input class="fld" type="email" placeholder="admin@yourschool.edu" value="admin@greenridge.edu"/>
+        <input class="fld" type="password" placeholder="Password" value="••••••••"/>
+        <button class="ba" style="width:100%;padding:14px;font-size:14px;border-radius:10px;margin-top:4px" onclick="doLogin('admin')">Sign In →</button>
+      </div>
+    </div>
+
+    <!-- school partner form -->
+    <div id="form-school-partner">
+      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.18);border-radius:10px;padding:14px;margin-bottom:18px;font-size:12px;color:rgba(124,58,237,0.75);line-height:1.6;">
+        ✦ Once your school is onboarded, you control all student & teacher accounts. Students can <em>only</em> sign up with an email your school issues.
+      </div>
+      <input class="fld" placeholder="School / Institution name" value="Greenridge International School"/>
+      <input class="fld" placeholder="Your name & role" value="Dr. Sarah Mitchell, Principal"/>
+      <input class="fld" type="email" placeholder="Official school email" value="smitchell@greenridge.edu"/>
+      <input class="fld" placeholder="Country" value="United Kingdom"/>
+      <select class="fld" style="color:var(--txt)">
+        <option>Select exam boards offered</option>
+        <option selected>IGCSE + A-Levels</option>
+        <option>GCSE + A-Levels</option>
+        <option>SAT + AP</option>
+        <option>IELTS / TOEFL prep</option>
+        <option>Multiple</option>
+      </select>
+      <button class="ba" style="width:100%;padding:14px;font-size:14px;border-radius:10px;margin-top:4px" onclick="doPartner()">Request Partnership →</button>
+      <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.15);margin-top:12px">We'll reach out within 48h · No commitment required</p>
+    </div>
+  </div>
+</div>
+
+<!-- =========== LANDING =========== -->
+<div class="page active" id="page-landing">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="eyebrow"><div class="edot"></div>School-Verified · AI-Powered · Global Exams</div>
+    <h1>
+      <div class="line"><span>Ace your exams.</span></div>
+      <div class="line"><span class="yl">Backed by</span> <span class="yl">your school.</span></div>
+      <div class="line"><span class="dim">Powered by AI.</span></div>
+    </h1>
+    <p class="hero-sub">EduSpark partners directly with schools — giving students AI-personalised prep for IGCSE, GCSE, SAT, AP, ACT, IELTS & TOEFL through verified, school-issued accounts.</p>
+    <div class="hero-cta">
+      <button class="bbig" onclick="openModal('partner')">Partner Your School</button>
+      <button class="bbig-o" onclick="openModal('login')">Student / Teacher Login</button>
+    </div>
+    <div class="exam-pills">
+      <div class="ep on">IGCSE</div>
+      <div class="ep">GCSE</div>
+      <div class="ep">SAT</div>
+      <div class="ep">AP</div>
+      <div class="ep">ACT</div>
+      <div class="ep">IELTS</div>
+      <div class="ep">TOEFL</div>
+      <div class="ep">A-Level</div>
+    </div>
+    <div class="stats-row">
+      <div class="st"><div class="stn" data-cnt="340" data-suf="+">340+</div><div class="stl">Partner Schools</div></div>
+      <div class="st"><div class="stn" data-cnt="120" data-suf="K+">120K+</div><div class="stl">Students</div></div>
+      <div class="st"><div class="stn" data-cnt="8" data-suf=" Exams">8 Exams</div><div class="stl">Supported</div></div>
+      <div class="st"><div class="stn" data-cnt="94" data-suf="%">94%</div><div class="stl">Pass Rate Lift</div></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="tinner">
+      <div class="ti"><div class="tsep"></div>IGCSE Prep</div>
+      <div class="ti"><div class="tsep"></div>GCSE Maths</div>
+      <div class="ti"><div class="tsep"></div>SAT Reading & Writing</div>
+      <div class="ti"><div class="tsep"></div>AP Calculus</div>
+      <div class="ti"><div class="tsep"></div>ACT Science</div>
+      <div class="ti"><div class="tsep"></div>IELTS Academic</div>
+      <div class="ti"><div class="tsep"></div>TOEFL iBT</div>
+      <div class="ti"><div class="tsep"></div>A-Level Physics</div>
+      <div class="ti"><div class="tsep"></div>School-Verified Accounts</div>
+      <div class="ti"><div class="tsep"></div>AI Adaptive Engine</div>
+      <!-- dup -->
+      <div class="ti"><div class="tsep"></div>IGCSE Prep</div>
+      <div class="ti"><div class="tsep"></div>GCSE Maths</div>
+      <div class="ti"><div class="tsep"></div>SAT Reading & Writing</div>
+      <div class="ti"><div class="tsep"></div>AP Calculus</div>
+      <div class="ti"><div class="tsep"></div>ACT Science</div>
+      <div class="ti"><div class="tsep"></div>IELTS Academic</div>
+      <div class="ti"><div class="tsep"></div>TOEFL iBT</div>
+      <div class="ti"><div class="tsep"></div>A-Level Physics</div>
+      <div class="ti"><div class="tsep"></div>School-Verified Accounts</div>
+      <div class="ti"><div class="tsep"></div>AI Adaptive Engine</div>
+    </div>
+  </div>
+
+  <!-- PARALLAX TEXT -->
+  <div class="par-wrap"><div class="par-txt" id="par1">EDUSPARK · IGCSE · GCSE · SAT · AP · ACT · IELTS · TOEFL · SCHOOL-VERIFIED · </div></div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-wrap" id="how-sec">
+    <div class="how-section">
+      <div class="se rv">How It Works</div>
+      <div class="st2 rv">One ecosystem. <span style="color:var(--mu);font-weight:300">Three players.</span></div>
+      <div class="how-grid stg" style="margin-top:44px">
+        <div class="how-card">
+          <div class="how-num">STEP ONE</div>
+          <h3>School Partners with EduSpark</h3>
+          <p>Your institution signs up and gets a dedicated admin portal. You decide which exams you offer, configure the curriculum, and set the rules.</p>
+          <span class="how-tag" style="background:rgba(124,58,237,0.1);color:var(--y);">🏫 School Admin</span>
+        </div>
+        <div class="how-card">
+          <div class="how-num">STEP TWO</div>
+          <h3>School Provisions Accounts</h3>
+          <p>Admins issue school-verified email addresses to teachers and students. No one can create an account without a credential issued by your school.</p>
+          <span class="how-tag" style="background:rgba(0,229,255,0.07);color:var(--c);">🔒 Verified Access</span>
+        </div>
+        <div class="how-card">
+          <div class="how-num">STEP THREE</div>
+          <h3>Students & Teachers Get to Work</h3>
+          <p>Students get AI-personalised practice. Teachers see real-time performance data. The AI flags gaps before exams — not after.</p>
+          <span class="how-tag" style="background:rgba(57,255,77,0.06);color:#39ff4d;">✦ AI-Driven Results</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAM SECTION -->
+  <div id="exams-sec">
+    <div class="sec">
+      <div class="se rv">Supported Qualifications</div>
+      <div class="st2 rv">Every major exam. <span style="color:var(--mu);font-weight:300">One platform.</span></div>
+      <p class="ssub rv">From British GCSEs to American SATs — your school chooses which exams to activate. Students only see what's relevant to them.</p>
+      <div class="egrid stg">
+        <div class="ec" onclick="showT('Launching IGCSE prep...');openModal('login')">
+          <span class="ec-ic">📐</span>
+          <div class="ec-badge" style="background:rgba(124,58,237,0.12);color:var(--y);">IGCSE</div>
+          <div class="ec-title">IGCSE</div>
+          <div class="ec-full">Cambridge International General Certificate</div>
+          <div class="ec-tags"><div class="ec-tag">Maths</div><div class="ec-tag">Sciences</div><div class="ec-tag">English</div><div class="ec-tag">Humanities</div></div>
+          <div class="ec-n">IG</div>
+        </div>
+        <div class="ec" onclick="showT('Launching GCSE prep...');openModal('login')">
+          <span class="ec-ic">📚</span>
+          <div class="ec-badge" style="background:rgba(0,229,255,0.08);color:var(--c);">GCSE</div>
+          <div class="ec-title">GCSE</div>
+          <div class="ec-full">General Certificate of Secondary Education</div>
+          <div class="ec-tags"><div class="ec-tag">AQA</div><div class="ec-tag">Edexcel</div><div class="ec-tag">OCR</div></div>
+          <div class="ec-n">GC</div>
+        </div>
+        <div class="ec" onclick="showT('Launching SAT prep...');openModal('login')">
+          <span class="ec-ic">🧮</span>
+          <div class="ec-badge" style="background:rgba(255,59,92,0.08);color:var(--r);">SAT</div>
+          <div class="ec-title">SAT</div>
+          <div class="ec-full">Scholastic Assessment Test</div>
+          <div class="ec-tags"><div class="ec-tag">Math</div><div class="ec-tag">Reading</div><div class="ec-tag">Writing</div></div>
+          <div class="ec-n">SA</div>
+        </div>
+        <div class="ec" onclick="showT('Launching AP prep...');openModal('login')">
+          <span class="ec-ic">🎓</span>
+          <div class="ec-badge" style="background:rgba(157,78,221,0.1);color:#c084fc;">AP</div>
+          <div class="ec-title">AP</div>
+          <div class="ec-full">Advanced Placement</div>
+          <div class="ec-tags"><div class="ec-tag">Calculus</div><div class="ec-tag">Biology</div><div class="ec-tag">History</div><div class="ec-tag">CS</div></div>
+          <div class="ec-n">AP</div>
+        </div>
+        <div class="ec" onclick="showT('Launching ACT prep...');openModal('login')">
+          <span class="ec-ic">✏️</span>
+          <div class="ec-badge" style="background:rgba(0,229,255,0.08);color:var(--c);">ACT</div>
+          <div class="ec-title">ACT</div>
+          <div class="ec-full">American College Testing</div>
+          <div class="ec-tags"><div class="ec-tag">English</div><div class="ec-tag">Math</div><div class="ec-tag">Reading</div><div class="ec-tag">Science</div></div>
+          <div class="ec-n">AC</div>
+        </div>
+        <div class="ec" onclick="showT('Launching IELTS prep...');openModal('login')">
+          <span class="ec-ic">🌍</span>
+          <div class="ec-badge" style="background:rgba(255,180,0,0.08);color:#fbbf24;">IELTS</div>
+          <div class="ec-title">IELTS</div>
+          <div class="ec-full">International English Language Testing System</div>
+          <div class="ec-tags"><div class="ec-tag">Academic</div><div class="ec-tag">General</div><div class="ec-tag">Band 7+</div></div>
+          <div class="ec-n">IE</div>
+        </div>
+        <div class="ec" onclick="showT('Launching TOEFL prep...');openModal('login')">
+          <span class="ec-ic">🗣️</span>
+          <div class="ec-badge" style="background:rgba(57,255,77,0.07);color:#4ade80;">TOEFL</div>
+          <div class="ec-title">TOEFL</div>
+          <div class="ec-full">Test of English as a Foreign Language</div>
+          <div class="ec-tags"><div class="ec-tag">iBT</div><div class="ec-tag">Speaking</div><div class="ec-tag">Writing</div></div>
+          <div class="ec-n">TF</div>
+        </div>
+        <div class="ec" onclick="showT('Launching A-Level prep...');openModal('login')">
+          <span class="ec-ic">⚗️</span>
+          <div class="ec-badge" style="background:rgba(255,59,92,0.08);color:var(--r);">A-LEVEL</div>
+          <div class="ec-title">A-Level</div>
+          <div class="ec-full">Advanced Level Qualification</div>
+          <div class="ec-tags"><div class="ec-tag">Sciences</div><div class="ec-tag">Maths</div><div class="ec-tag">Arts</div></div>
+          <div class="ec-n">AL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHOOL PARTNER SECTION -->
+  <div class="school-band">
+    <div class="school-inner">
+      <div class="school-left rvl">
+        <div class="se" style="margin-bottom:10px">For Schools</div>
+        <h2>You control the ecosystem. <span style="color:var(--y);">Completely.</span></h2>
+        <p>EduSpark is not a consumer app. It's an institutional platform. Only your school can create student and teacher accounts — keeping your campus community safe, focused, and verified.</p>
+        <p style="margin-bottom:0">Every account traces back to your institution. You decide which exams are active, which teachers are enrolled, and which students can access what.</p>
+        <div class="vbadge">SCHOOL-VERIFIED ACCOUNTS ONLY</div>
+      </div>
+      <div class="trust-flow rvr">
+        <div class="tf-step">
+          <div class="tf-icon" style="background:rgba(124,58,237,0.12);">🏫</div>
+          <div>
+            <div class="tf-title">School Joins EduSpark</div>
+            <div class="tf-desc">Admin portal activated. Exam boards configured. Your institution is in control.</div>
+          </div>
+        </div>
+        <div class="tf-connector"></div>
+        <div class="tf-step">
+          <div class="tf-icon" style="background:rgba(0,229,255,0.08);">📧</div>
+          <div>
+            <div class="tf-title">School Issues Credentials</div>
+            <div class="tf-desc">Admin bulk-creates accounts. Students & teachers receive verified login emails from your school domain.</div>
+          </div>
+        </div>
+        <div class="tf-connector"></div>
+        <div class="tf-step">
+          <div class="tf-icon" style="background:rgba(57,255,77,0.07);">🤖</div>
+          <div>
+            <div class="tf-title">AI Does the Rest</div>
+            <div class="tf-desc">Students practice. AI identifies weaknesses. Teachers get daily reports. Results improve.</div>
+          </div>
+        </div>
+        <div class="tf-connector"></div>
+        <div class="tf-step">
+          <div class="tf-icon" style="background:rgba(255,59,92,0.08);">🔒</div>
+          <div>
+            <div class="tf-title">No Outside Sign-Ups. Ever.</div>
+            <div class="tf-desc">Zero random accounts. No social logins. No public registration. Pure, closed academic environment.</div>
+          </div>
+        </div>
+        <div style="margin-top:18px;padding:0 0 0 18px">
+          <button class="ba" onclick="openModal('partner')" style="padding:12px 28px;font-size:14px;">Partner Your School →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY EDUSPARK -->
+  <div class="sec">
+    <div class="se rv">Why EduSpark</div>
+    <div class="st2 rv">The unfair <span style="color:var(--y);">advantage.</span></div>
+    <div class="wgrid stg" style="margin-top:44px">
+      <div class="wc">
+        <div class="wi" style="background:rgba(124,58,237,0.12)">🧠</div>
+        <h3>AI That Learns Your Weaknesses</h3>
+        <p>Every wrong answer is an input. The engine silently reweights your question feed — serving exactly what you need to master, not what you already know.</p>
+      </div>
+      <div class="wc">
+        <div class="wi" style="background:rgba(0,229,255,0.08)">🔒</div>
+        <h3>Zero Open Registration</h3>
+        <p>No public sign-up. No social logins. Every account is issued and controlled by a partner school — creating a focused, safe academic environment.</p>
+      </div>
+      <div class="wc">
+        <div class="wi" style="background:rgba(57,255,77,0.07)">📊</div>
+        <h3>Teacher Intelligence Loop</h3>
+        <p>Teachers wake up to a ranked list of struggling students, tagged by subject and topic. Intervention happens before exam day — not after results come out.</p>
+      </div>
+      <div class="wc">
+        <div class="wi" style="background:rgba(157,78,221,0.1)">🌍</div>
+        <h3>Every Major Exam Covered</h3>
+        <p>IGCSE, GCSE, SAT, AP, ACT, IELTS, TOEFL, A-Level. One platform. Your school activates only the qualifications it teaches.</p>
+      </div>
+      <div class="wc">
+        <div class="wi" style="background:rgba(255,180,0,0.08)">⚡</div>
+        <h3>AI Question Generation</h3>
+        <p>Teachers type a topic. In seconds, a full, exam-board-aligned question set is generated and pushed directly to targeted students.</p>
+      </div>
+      <div class="wc">
+        <div class="wi" style="background:rgba(255,59,92,0.08)">🚫</div>
+        <h3>Zero Ads, Zero Noise</h3>
+        <p>No algorithms chasing engagement. No ads. No rabbit holes. A pure academic tool designed for high-stakes preparation, not screen time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE STUDENT HORIZONTAL SCROLL -->
+  <div style="padding:0 0 12px">
+    <div class="sec" style="padding-bottom:20px">
+      <div class="se rv">Students Crushing It</div>
+      <div class="st2 rv" style="margin-bottom:0">Live results from partner schools.</div>
+    </div>
+    <div class="hs-wrap">
+      <div class="hs-track">
+        <div class="hsc"><div class="hsc-exam">IGCSE</div><div class="hsc-school">Greenridge Int'l</div><div class="hsc-name">Aisha Malik</div><div class="hsc-score">A* Track</div></div>
+        <div class="hsc"><div class="hsc-exam">SAT</div><div class="hsc-school">Westfield Academy</div><div class="hsc-name">James Okafor</div><div class="hsc-score">1480 / 1600</div></div>
+        <div class="hsc"><div class="hsc-exam">IELTS</div><div class="hsc-school">City College</div><div class="hsc-name">Priya Sharma</div><div class="hsc-score">Band 7.5</div></div>
+        <div class="hsc"><div class="hsc-exam">AP Calc</div><div class="hsc-school">Jefferson High</div><div class="hsc-name">Marcus Chen</div><div class="hsc-score">Score 5</div></div>
+        <div class="hsc"><div class="hsc-exam">GCSE</div><div class="hsc-school">Northshore School</div><div class="hsc-name">Sophie Evans</div><div class="hsc-score">Grade 9</div></div>
+        <div class="hsc"><div class="hsc-exam">TOEFL</div><div class="hsc-school">IB Academy Dubai</div><div class="hsc-name">Ahmed Al-Rashid</div><div class="hsc-score">114 / 120</div></div>
+        <div class="hsc"><div class="hsc-exam">ACT</div><div class="hsc-school">Lincoln Prep</div><div class="hsc-name">Zoe Williams</div><div class="hsc-score">34 / 36</div></div>
+        <div class="hsc"><div class="hsc-exam">A-Level</div><div class="hsc-school">Harrow Intl</div><div class="hsc-name">Rohan Patel</div><div class="hsc-score">A* Chemistry</div></div>
+        <!-- dup -->
+        <div class="hsc"><div class="hsc-exam">IGCSE</div><div class="hsc-school">Greenridge Int'l</div><div class="hsc-name">Aisha Malik</div><div class="hsc-score">A* Track</div></div>
+        <div class="hsc"><div class="hsc-exam">SAT</div><div class="hsc-school">Westfield Academy</div><div class="hsc-name">James Okafor</div><div class="hsc-score">1480 / 1600</div></div>
+        <div class="hsc"><div class="hsc-exam">IELTS</div><div class="hsc-school">City College</div><div class="hsc-name">Priya Sharma</div><div class="hsc-score">Band 7.5</div></div>
+        <div class="hsc"><div class="hsc-exam">AP Calc</div><div class="hsc-school">Jefferson High</div><div class="hsc-name">Marcus Chen</div><div class="hsc-score">Score 5</div></div>
+        <div class="hsc"><div class="hsc-exam">GCSE</div><div class="hsc-school">Northshore School</div><div class="hsc-name">Sophie Evans</div><div class="hsc-score">Grade 9</div></div>
+        <div class="hsc"><div class="hsc-exam">TOEFL</div><div class="hsc-school">IB Academy Dubai</div><div class="hsc-name">Ahmed Al-Rashid</div><div class="hsc-score">114 / 120</div></div>
+        <div class="hsc"><div class="hsc-exam">ACT</div><div class="hsc-school">Lincoln Prep</div><div class="hsc-name">Zoe Williams</div><div class="hsc-score">34 / 36</div></div>
+        <div class="hsc"><div class="hsc-exam">A-Level</div><div class="hsc-school">Harrow Intl</div><div class="hsc-name">Rohan Patel</div><div class="hsc-score">A* Chemistry</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="se rv" style="display:flex;justify-content:center">Get Started</div>
+    <h2 class="rv">Your school. <span style="color:var(--y);">Your ecosystem.</span></h2>
+    <p class="rv">Partner with EduSpark and give your students the most powerful, verified exam prep platform on the planet.</p>
+    <div class="rv">
+      <button class="bbig" onclick="openModal('partner')">Partner Your School →</button>
+    </div>
+    <p class="cta-school-note rv">Only schools can onboard students · Verified accounts only · No public sign-up</p>
+  </div>
+</div><!-- end landing -->
+
+<!-- =========== STUDENT APP =========== -->
+<div class="fp" id="page-app">
+  <div class="sidebar">
+    <div class="suser">
+      <div class="av">AJ</div>
+      <div><div class="uname">Alex Johnson</div><div class="uinfo">IGCSE · Greenridge Int'l</div></div>
+    </div>
+    <button class="ni active" id="n-subjects" onclick="setS('subjects')"><span class="ni-ic">📚</span>My Subjects</button>
+    <button class="ni" id="n-quiz" onclick="setS('quiz')"><span class="ni-ic">✏️</span>Practice</button>
+    <button class="ni" id="n-progress" onclick="setS('progress')"><span class="ni-ic">📈</span>Progress</button>
+    <button class="ni" id="n-messages" onclick="setS('messages')"><span class="ni-ic">💬</span>Messages<span class="bdg">2</span></button>
+    <div class="nsep"></div>
+    <div style="padding:10px 13px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(238,240,255,0.18);">Greenridge Int'l</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 13px;font-size:12px;color:rgba(124,58,237,0.65);">🔒 School-verified account</div>
+    <div style="flex:1"></div>
+    <button class="ni" onclick="showPage('landing')"><span class="ni-ic">←</span>Back to Home</button>
+  </div>
+  <div class="mcont">
+    <div id="ss-subjects">
+      <div class="ph"><div class="ey">Good morning</div><h2>Alex 👋</h2></div>
+      <div class="aib"><div class="aib-ic">🤖</div><div><div class="aib-lbl">AI Report · Sent to Ms. Taylor</div><p>Your IGCSE Maths showed difficulty with quadratic equations. I've queued 6 targeted questions and notified your teacher.</p></div></div>
+      <div class="sgrid">
+        <div class="scard" onclick="setSubj('Math');setS('quiz')"><span class="scard-ic">➕</span><div class="scard-n">IGCSE Maths</div><div class="scard-exam" style="color:var(--r)">Needs Focus</div><div class="bar"><div class="barf" style="width:52%;background:linear-gradient(90deg,#ef4444,#f97316)"></div></div><div class="scard-sc">52%</div></div>
+        <div class="scard" onclick="setSubj('English');setS('quiz')"><span class="scard-ic">📖</span><div class="scard-n">IGCSE English</div><div class="scard-exam" style="color:#4ade80">On Track</div><div class="bar"><div class="barf" style="width:78%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div><div class="scard-sc">78%</div></div>
+        <div class="scard" onclick="setSubj('Science');setS('quiz')"><span class="scard-ic">🔬</span><div class="scard-n">IGCSE Biology</div><div class="scard-exam" style="color:#4ade80">On Track</div><div class="bar"><div class="barf" style="width:74%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><div class="scard-sc">74%</div></div>
+        <div class="scard" onclick="setSubj('History');setS('quiz')"><span class="scard-ic">🏛️</span><div class="scard-n">IGCSE History</div><div class="scard-exam" style="color:#fb923c">Needs Focus</div><div class="bar"><div class="barf" style="width:55%;background:linear-gradient(90deg,#ea580c,#fb923c)"></div></div><div class="scard-sc">55%</div></div>
+        <div class="scard" onclick="setSubj('Physics');setS('quiz')"><span class="scard-ic">⚛️</span><div class="scard-n">IGCSE Physics</div><div class="scard-exam" style="color:#4ade80">On Track</div><div class="bar"><div class="barf" style="width:81%;background:linear-gradient(90deg,#a21caf,#e879f9)"></div></div><div class="scard-sc">81%</div></div>
+        <div class="scard" style="border-style:dashed;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px" onclick="showT('Activate more subjects via your school admin')"><span style="font-size:22px;opacity:.18">+</span><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);opacity:.5">More Subjects</div></div>
+      </div>
+    </div>
+    <div id="ss-quiz" style="display:none">
+      <div style="display:flex;align-items:center;gap:13px;margin-bottom:26px">
+        <button onclick="setS('subjects')" class="bg" style="padding:8px 14px;font-size:12px">← Back</button>
+        <div class="ph" style="margin:0"><div class="ey">AI-Personalised · IGCSE</div><h2 id="qtitle">Maths Practice</h2></div>
+      </div>
+      <div class="qwrap" id="qarea"></div>
+    </div>
+    <div id="ss-progress" style="display:none">
+      <div class="ph"><div class="ey">Your Journey</div><h2>Progress 📈</h2></div>
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:26px;margin-bottom:18px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mu);margin-bottom:18px">Subject Mastery · IGCSE</div>
+        <div class="prow"><span class="plbl">Maths</span><div class="pbar"><div class="pbarf" style="width:52%;background:linear-gradient(90deg,#ef4444,#f97316)"></div></div><span class="ppct">52%</span></div>
+        <div class="prow"><span class="plbl">English</span><div class="pbar"><div class="pbarf" style="width:78%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div><span class="ppct">78%</span></div>
+        <div class="prow"><span class="plbl">Biology</span><div class="pbar"><div class="pbarf" style="width:74%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><span class="ppct">74%</span></div>
+        <div class="prow"><span class="plbl">History</span><div class="pbar"><div class="pbarf" style="width:55%;background:linear-gradient(90deg,#ea580c,#fb923c)"></div></div><span class="ppct">55%</span></div>
+        <div class="prow"><span class="plbl">Physics</span><div class="pbar"><div class="pbarf" style="width:81%;background:linear-gradient(90deg,#a21caf,#e879f9)"></div></div><span class="ppct">81%</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        <div class="s4"><div class="s4n">🔥 12</div><div class="s4l">Day Streak</div></div>
+        <div class="s4"><div class="s4n">67</div><div class="s4l">Sessions</div></div>
+        <div class="s4"><div class="s4n">🏆 5</div><div class="s4l">Badges</div></div>
+        <div class="s4"><div class="s4n" style="color:var(--y)">IGCSE</div><div class="s4l">Exam Target</div></div>
+      </div>
+    </div>
+    <div id="ss-messages" style="display:none">
+      <div class="ph"><div class="ey">Inbox</div><h2>Messages 💬</h2></div>
+      <div class="mc2"><div class="mhdr"><div style="display:flex;align-items:center;gap:9px"><div style="width:32px;height:32px;border-radius:9px;background:var(--yg);display:flex;align-items:center;justify-content:center;font-size:15px">👩‍🏫</div><div><div class="mname">Ms. Taylor</div><div class="mrole">IGCSE Maths · Greenridge</div></div></div><div class="mtime">2h ago</div></div><div class="mbody">Hi Alex, I've reviewed your AI report. I've queued targeted questions on quadratics — work through them today. Your Physics is looking great 💪</div><span class="mtag" style="background:var(--yg);color:var(--y)">IGCSE Maths</span></div>
+      <div class="mc2"><div class="mhdr"><div style="display:flex;align-items:center;gap:9px"><div style="width:32px;height:32px;border-radius:9px;background:rgba(0,229,255,0.08);display:flex;align-items:center;justify-content:center;font-size:15px">👨‍🏫</div><div><div class="mname">Mr. Osei</div><div class="mrole">IGCSE History · Greenridge</div></div></div><div class="mtime">Yesterday</div></div><div class="mbody">New Cold War practice questions are live. The AI flagged this as your biggest gap area — let's close it before your mock in 3 weeks.</div><span class="mtag" style="background:rgba(0,229,255,0.08);color:var(--c)">IGCSE History</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== TEACHER APP =========== -->
+<div class="fp" id="page-teacher">
+  <div class="sidebar">
+    <div class="suser">
+      <div class="av" style="background:linear-gradient(135deg,#16a34a,#4ade80);color:#fff">MT</div>
+      <div><div class="uname">Ms. Taylor</div><div class="uinfo">Maths · Greenridge Int'l</div></div>
+    </div>
+    <button class="ni active" id="tn-dash" onclick="setT('dash')"><span class="ni-ic">🏠</span>Dashboard</button>
+    <button class="ni" id="tn-gen" onclick="setT('gen')"><span class="ni-ic">✨</span>Generate Qs</button>
+    <button class="ni" id="tn-reports" onclick="setT('reports')"><span class="ni-ic">📊</span>Reports</button>
+    <div class="nsep"></div>
+    <div style="padding:10px 13px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(238,240,255,0.18);">Greenridge Int'l</div>
+    <div style="flex:1"></div>
+    <button class="ni" onclick="showPage('landing')"><span class="ni-ic">←</span>Back</button>
+  </div>
+  <div class="mcont">
+    <div id="ts-dash">
+      <div class="ph"><div class="ey">Overview</div><h2>Dashboard 🏫</h2></div>
+      <div class="stats4">
+        <div class="s4"><div class="s4n">34</div><div class="s4l">Students</div></div>
+        <div class="s4"><div class="s4n" style="color:var(--r)">7</div><div class="s4l">Need Help</div></div>
+        <div class="s4"><div class="s4n">218</div><div class="s4l">Sessions Today</div></div>
+        <div class="s4"><div class="s4n" style="color:var(--y)">79%</div><div class="s4l">Avg Score</div></div>
+      </div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:8px"><div class="td"></div>AI Priority Alerts</div>
+      <div class="atrow"><span style="font-size:22px">🧑‍🎓</span><div style="flex:1"><div style="font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:5px">Alex Johnson <span style="background:var(--yg);color:var(--y);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-left:4px">IGCSE</span></div><div style="display:flex;gap:5px"><span class="wtag">Quadratics</span><span class="wtag">Cold War</span></div></div><button class="ba" style="font-size:12px;padding:7px 14px" onclick="setT('gen');showT('Generator ready for Alex')">Generate →</button></div>
+      <div class="atrow"><span style="font-size:22px">👧</span><div style="flex:1"><div style="font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:5px">Priya Sharma <span style="background:rgba(0,229,255,0.08);color:var(--c);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-left:4px">IELTS</span></div><div style="display:flex;gap:5px"><span class="wtag">Task 2 Writing</span></div></div><button class="ba" style="font-size:12px;padding:7px 14px" onclick="setT('gen')">Generate →</button></div>
+      <div class="atrow"><span style="font-size:22px">👦</span><div style="flex:1"><div style="font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:5px">Kwame Asante <span style="background:rgba(157,78,221,0.1);color:#c084fc;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-left:4px">IGCSE</span></div><div style="display:flex;gap:5px"><span class="wtag">Algebra</span><span class="wtag">Probability</span></div></div><button class="ba" style="font-size:12px;padding:7px 14px" onclick="setT('gen')">Generate →</button></div>
+    </div>
+    <div id="ts-gen" style="display:none">
+      <div class="ph"><div class="ey">AI Engine</div><h2>Generate Questions ✨</h2></div>
+      <div class="gcrd2">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:13px">
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mu);margin-bottom:7px">Exam</div><select class="fld" id="gg" style="margin:0"><option>IGCSE</option><option>GCSE</option><option>SAT</option><option>AP</option><option>ACT</option><option>IELTS</option><option>TOEFL</option><option>A-Level</option></select></div>
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mu);margin-bottom:7px">Subject</div><select class="fld" id="gs" style="margin:0"><option>Maths</option><option>English</option><option>Biology</option><option>Physics</option><option>Chemistry</option><option>History</option></select></div>
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mu);margin-bottom:7px">Target Student</div><select class="fld" id="gtgt" style="margin:0"><option>All Students</option><option>Alex Johnson</option><option>Priya Sharma</option><option>Kwame Asante</option></select></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mu);margin-bottom:7px">Topic / Focus Area</div>
+        <input class="fld" id="gf" placeholder="e.g. Quadratic equations, Cold War, Photosynthesis..." style="margin-bottom:13px"/>
+        <button class="ba" id="gbtn" style="width:100%;padding:14px;font-size:14px;border-radius:10px" onclick="genQs()">✨ Generate with AI</button>
+      </div>
+      <div id="gout"></div>
+    </div>
+    <div id="ts-reports" style="display:none">
+      <div class="ph"><div class="ey">Analytics · IGCSE Cohort</div><h2>Student Reports 📊</h2></div>
+      <div class="rtable">
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 20px;padding:11px 18px;border-bottom:1px solid var(--border)">
+          ${['Student','Maths','English','Biology','History',''].map(l=>`<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);text-align:${l==='Student'||l===''?'left':'center'}">${l}</span>`).join('')}
+        </div>
+        ${[['AJ','Alex Johnson','IGCSE',52,78,74,55],['PS','Priya Sharma','IELTS',88,91,79,83],['KA','Kwame Asante','IGCSE',41,65,68,72],['SR','Sofia Ramirez','GCSE',76,82,85,90]].map(([init,n,ex,...s])=>`
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 20px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.025);align-items:center;cursor:default;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,0.04)'" onmouseout="this.style.background=''" onclick="showT('Full report for ${n} 📋')">
+          <div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;border-radius:8px;background:var(--y);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:800;color:#f0e8ff">${init}</div><div><div style="font-family:var(--fd);font-size:13px;font-weight:700">${n}</div><div style="font-size:10px;color:var(--mu)">${ex}</div></div></div>
+          ${s.map(v=>`<div style="text-align:center;font-family:var(--fd);font-size:13px;font-weight:800;color:${v<60?'#f87171':v<75?'#fb923c':'#4ade80'}">${v}%</div>`).join('')}
+          <span style="color:var(--mu);font-size:13px">→</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== SCHOOL ADMIN APP =========== -->
+<div class="fp" id="page-admin">
+  <div class="sidebar">
+    <div class="suser">
+      <div class="av" style="background:linear-gradient(135deg,#7c3aed,#c084fc)">SA</div>
+      <div><div class="uname">Dr. S. Mitchell</div><div class="uinfo">Principal · Greenridge Int'l</div></div>
+    </div>
+    <button class="ni active" id="an-dash" onclick="setA('dash')"><span class="ni-ic">🏫</span>Overview</button>
+    <button class="ni" id="an-provision" onclick="setA('provision')"><span class="ni-ic">👤</span>Provision Accounts</button>
+    <button class="ni" id="an-exams" onclick="setA('exams')"><span class="ni-ic">📋</span>Active Exams</button>
+    <button class="ni" id="an-reports" onclick="setA('areports')"><span class="ni-ic">📊</span>School Reports</button>
+    <div class="nsep"></div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 13px;font-size:11px;color:rgba(124,58,237,0.6);">🔒 Greenridge Int'l · Verified Partner</div>
+    <div style="flex:1"></div>
+    <button class="ni" onclick="showPage('landing')"><span class="ni-ic">←</span>Back</button>
+  </div>
+  <div class="mcont">
+    <div id="as-dash">
+      <div class="ph"><div class="ey">School Overview</div><h2>Greenridge Int'l 🏫</h2></div>
+      <div class="sadmin-grid">
+        <div class="sadmin-crd"><div class="sadn">342</div><div class="sadl">Total Students</div></div>
+        <div class="sadmin-crd"><div class="sadn">28</div><div class="sadl">Teachers</div></div>
+        <div class="sadmin-crd"><div class="sadn" style="color:var(--y)">5</div><div class="sadl">Active Exams</div></div>
+        <div class="sadmin-crd"><div class="sadn">2,841</div><div class="sadl">Sessions This Week</div></div>
+        <div class="sadmin-crd"><div class="sadn" style="color:#4ade80">81%</div><div class="sadl">Avg School Score</div></div>
+        <div class="sadmin-crd"><div class="sadn" style="color:var(--r)">19</div><div class="sadl">Students Flagged</div></div>
+      </div>
+      <div class="aib"><div class="aib-ic">🤖</div><div><div class="aib-lbl">AI School Digest · Today</div><p>19 students flagged across 5 subjects. IGCSE Maths cohort average dropped 4% this week — recommend teacher review session. IELTS Writing Band scores improving across Year 11.</p></div></div>
+    </div>
+    <div id="as-provision" style="display:none">
+      <div class="ph"><div class="ey">Account Control</div><h2>Provision Accounts 👤</h2></div>
+      <div class="aib" style="margin-bottom:20px"><div class="aib-ic">🔒</div><div><div class="aib-lbl">School-Controlled Access</div><p>Only you can create accounts. Students and teachers receive credentials from your school domain — no public registration possible.</p></div></div>
+      <div class="action-row">
+        <button class="ba" style="padding:10px 22px;font-size:13px" onclick="showT('Bulk CSV upload opened')">+ Bulk Upload CSV</button>
+        <button class="ba" style="padding:10px 22px;font-size:13px" onclick="showT('Creating single account...')">+ Single Account</button>
+        <button class="bg" style="padding:10px 22px;font-size:13px" onclick="showT('Exporting account list...')">Export List</button>
+      </div>
+      <div class="provision-table">
+        <div class="pt-head">
+          <span>Name</span><span>Type</span><span>Exam</span><span>Status</span><span>Action</span>
+        </div>
+        ${[['Alex Johnson','Student','IGCSE','Active'],['Priya Sharma','Student','IELTS','Active'],['Kwame Asante','Student','IGCSE','Active'],['Ms. Taylor','Teacher','IGCSE + GCSE','Active'],['Mr. Osei','Teacher','IGCSE','Active'],['Sam Brown','Student','SAT','Pending']].map(([n,type,ex,status])=>`
+        <div class="pt-row">
+          <div style="font-family:var(--fd);font-size:13px;font-weight:600">${n}</div>
+          <div style="font-size:12px;color:var(--mu)">${type}</div>
+          <div style="font-size:12px;color:var(--y);font-weight:600">${ex}</div>
+          <div><span style="padding:2px 9px;border-radius:4px;font-size:10px;font-weight:700;background:${status==='Active'?'rgba(57,255,77,0.08)':'rgba(255,180,0,0.08)'};color:${status==='Active'?'#4ade80':'#fbbf24'}">${status}</span></div>
+          <button class="bg" style="font-size:11px;padding:4px 10px" onclick="showT('Account for ${n} updated')">Edit</button>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div id="as-exams" style="display:none">
+      <div class="ph"><div class="ey">Curriculum</div><h2>Active Exams 📋</h2></div>
+      <p style="font-size:13px;color:var(--mu);margin-bottom:22px;line-height:1.7">Toggle which qualifications your school uses. Only activated exams appear in student and teacher dashboards.</p>
+      ${[['📐','IGCSE','Cambridge IGCSE','Active',true],['📚','GCSE','General Certificate','Active',true],['🌍','IELTS','Academic Band Prep','Active',true],['🗣️','TOEFL','iBT Preparation','Active',true],['🎓','A-Level','Advanced Level','Active',true],['🧮','SAT','Scholastic Assessment','Inactive',false],['✏️','AP','Advanced Placement','Inactive',false],['📝','ACT','American College Testing','Inactive',false]].map(([ic,name,full,status,on])=>`
+      <div style="display:flex;align-items:center;gap:14px;background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:15px 18px;margin-bottom:9px;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(124,58,237,0.22)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+        <span style="font-size:22px">${ic}</span>
+        <div style="flex:1"><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:2px">${name}</div><div style="font-size:12px;color:var(--mu)">${full}</div></div>
+        <span style="padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;background:${on?'rgba(57,255,77,0.08)':'rgba(255,255,255,0.04)'};color:${on?'#4ade80':'var(--mu)'}">${status}</span>
+        <button class="ba" style="font-size:12px;padding:7px 14px;background:${on?'rgba(255,59,92,0.15)':'var(--y)'};color:${on?'var(--r)':'#f0e8ff'};border:1px solid ${on?'rgba(255,59,92,0.3)':'transparent'}" onclick="showT('${name} ${on?'deactivated':'activated'} for Greenridge')">
+          ${on?'Deactivate':'Activate'}
+        </button>
+      </div>`).join('')}
+    </div>
+    <div id="as-areports" style="display:none">
+      <div class="ph"><div class="ey">School-Wide Analytics</div><h2>School Reports 📊</h2></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px">
+        <div style="background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mu);margin-bottom:16px">IGCSE Cohort Mastery</div>
+          <div class="prow"><span class="plbl">Maths</span><div class="pbar"><div class="pbarf" style="width:63%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div><span class="ppct">63%</span></div>
+          <div class="prow"><span class="plbl">English</span><div class="pbar"><div class="pbarf" style="width:81%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div><span class="ppct">81%</span></div>
+          <div class="prow"><span class="plbl">Biology</span><div class="pbar"><div class="pbarf" style="width:74%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><span class="ppct">74%</span></div>
+          <div class="prow"><span class="plbl">Physics</span><div class="pbar"><div class="pbarf" style="width:68%;background:linear-gradient(90deg,#a21caf,#e879f9)"></div></div><span class="ppct">68%</span></div>
+        </div>
+        <div style="background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:22px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mu);margin-bottom:16px">Engagement This Week</div>
+          <div class="prow"><span class="plbl">Mon</span><div class="pbar"><div class="pbarf" style="width:78%;background:var(--y)"></div></div><span class="ppct">78%</span></div>
+          <div class="prow"><span class="plbl">Tue</span><div class="pbar"><div class="pbarf" style="width:85%;background:var(--y)"></div></div><span class="ppct">85%</span></div>
+          <div class="prow"><span class="plbl">Wed</span><div class="pbar"><div class="pbarf" style="width:72%;background:var(--y)"></div></div><span class="ppct">72%</span></div>
+          <div class="prow"><span class="plbl">Thu</span><div class="pbar"><div class="pbarf" style="width:91%;background:var(--y)"></div></div><span class="ppct">91%</span></div>
+          <div class="prow"><span class="plbl">Fri</span><div class="pbar"><div class="pbarf" style="width:55%;background:var(--y);opacity:0.5"></div></div><span class="ppct">55%</span></div>
+        </div>
+      </div>
+      <button class="ba" onclick="showT('Full PDF report downloading...')" style="padding:11px 26px;font-size:13px">Download Full Report PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CURSOR ───
+const cr=document.getElementById('cr'),cr2=document.getElementById('cr2');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cr.style.left=mx+'px';cr.style.top=my+'px';});
+(function ac(){cx+=(mx-cx)*0.1;cy+=(my-cy)*0.1;cr2.style.left=cx+'px';cr2.style.top=cy+'px';requestAnimationFrame(ac);})();
+document.querySelectorAll('button,a,.ec,.wc,.hsc,.ep,.scard').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cr.style.width='16px';cr.style.height='16px';cr2.style.width='48px';cr2.style.height='48px';});
+  el.addEventListener('mouseleave',()=>{cr.style.width='8px';cr.style.height='8px';cr2.style.width='32px';cr2.style.height='32px';});
+});
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100;
+  document.getElementById('sp').style.width=p+'%';
+},{passive:true});
+
+// ─── PARALLAX ───
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('par1');
+  if(p)p.style.transform=`translateX(${-window.scrollY*0.28}px)`;
+},{passive:true});
+
+// ─── SPEED LINES CANVAS ───
+const canvas=document.getElementById('vc'),ctx=canvas.getContext('2d');
+let lines=[],lastY=0,vel=0;
+function resizeC(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resizeC();window.addEventListener('resize',resizeC);
+window.addEventListener('scroll',()=>{
+  vel=Math.abs(scrollY-lastY);lastY=scrollY;
+  const n=Math.min(vel*0.6,10);
+  for(let i=0;i<n;i++){
+    lines.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,len:30+Math.random()*130,op:0.2+Math.random()*0.5,sp:2+Math.random()*5,life:1});
+  }
+},{passive:true});
+(function drawL(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  lines=lines.filter(l=>l.life>0);
+  const target=Math.min(lines.length/18,0.9);
+  canvas.style.opacity=lines.length>0?target:0;
+  lines.forEach(l=>{
+    const g=ctx.createLinearGradient(l.x,l.y,l.x,l.y+l.len);
+    g.addColorStop(0,'rgba(124,58,237,0)');
+    g.addColorStop(0.5,`rgba(124,58,237,${l.op*l.life})`);
+    g.addColorStop(1,'rgba(124,58,237,0)');
+    ctx.beginPath();ctx.strokeStyle=g;ctx.lineWidth=0.5;
+    ctx.moveTo(l.x,l.y);ctx.lineTo(l.x+(Math.random()-.5)*3,l.y+l.len);ctx.stroke();
+    l.y-=l.sp;l.life-=0.045;
+  });
+  requestAnimationFrame(drawL);
+})();
+
+// ─── INTERSECTION OBSERVER ───
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv,.rvl,.rvr,.stg').forEach(el=>io.observe(el));
+
+// ─── NUMBER COUNTER ───
+function runCounter(el){
+  const target=parseInt(el.dataset.cnt),suf=el.dataset.suf||'';
+  let v=0;const step=target/(1600/16);
+  const t=setInterval(()=>{v=Math.min(v+step,target);el.textContent=Math.round(v)+suf;if(v>=target)clearInterval(t);},16);
+}
+setTimeout(()=>document.querySelectorAll('[data-cnt]').forEach(runCounter),500);
+
+// ─── EXAM PILLS ───
+document.querySelectorAll('.ep').forEach(ep=>{
+  ep.addEventListener('click',function(){
+    document.querySelectorAll('.ep').forEach(e=>e.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+
+// ─── MAGNETIC BUTTONS ───
+document.querySelectorAll('.bbig,.ba,.btn-accent').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;
+    btn.style.transform=`translate(${x*.1}px,${y*.1}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>btn.style.transform='');
+});
+
+// ─── 3D TILT CARDS ───
+document.querySelectorAll('.ec,.wc').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`translateY(-7px) rotateX(${-y*7}deg) rotateY(${x*7}deg)`;
+    c.style.transformStyle='preserve-3d';
+  });
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
+
+// ─── MODAL ───
+function openModal(type){
+  document.getElementById('modal').classList.add('open');
+  if(type==='partner'){
+    document.getElementById('form-login').style.display='none';
+    document.getElementById('form-school-partner').style.display='block';
+    document.getElementById('modal-title').textContent='Partner Your School';
+    document.getElementById('modal-sub').textContent='Give your students verified AI exam prep';
+  } else {
+    document.getElementById('form-login').style.display='block';
+    document.getElementById('form-school-partner').style.display='none';
+    document.getElementById('modal-title').textContent='Sign In';
+    document.getElementById('modal-sub').textContent='Access your school-verified account';
+  }
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function swTab(t){
+  ['s','t','a'].forEach(x=>{
+    document.getElementById('t-'+x).classList.toggle('active',x===t);
+    document.getElementById('f'+x).style.display=x===t?'block':'none';
+  });
+}
+function doPartner(){closeModal();showT('✦ Request sent! We\'ll reach out within 48h');}
+
+// ─── LOGIN ───
+function doLogin(r){
+  closeModal();
+  const msgs={student:'🎒 Welcome, Alex!',teacher:'👩‍🏫 Welcome, Ms. Taylor!',admin:'🏫 Welcome, Dr. Mitchell!'};
+  showT(msgs[r]);
+  setTimeout(()=>showPage(r==='student'?'app':r==='teacher'?'teacher':'admin'),500);
+}
+
+// ─── PAGES ───
+function showPage(id){
+  document.querySelectorAll('.page,.fp').forEach(p=>{p.classList.remove('active');p.style.display='none';});
+  const pg=document.getElementById('page-'+id);
+  const flex=['app','teacher','admin'];
+  pg.style.display=flex.includes(id)?'flex':'block';
+  pg.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ─── STUDENT SECTIONS ───
+const SECS=['subjects','quiz','progress','messages'];
+function setS(s){
+  SECS.forEach(x=>{document.getElementById('ss-'+x).style.display=x===s?'block':'none';const n=document.getElementById('n-'+x);if(n)n.classList.toggle('active',x===s);});
+  if(s==='quiz')rQ();
+}
+// ─── TEACHER SECTIONS ───
+const TSECS=['dash','gen','reports'];
+function setT(s){
+  TSECS.forEach(x=>{document.getElementById('ts-'+x).style.display=x===s?'block':'none';const n=document.getElementById('tn-'+x);if(n)n.classList.toggle('active',x===s);});
+}
+// ─── ADMIN SECTIONS ───
+const ASECS=['dash','provision','exams','areports'];
+function setA(s){
+  ASECS.forEach(x=>{document.getElementById('as-'+x).style.display=x===s?'block':'none';const n=document.getElementById('an-'+x);if(n)n.classList.toggle('active',x===s);});
+}
+
+// ─── TOAST ───
+function showT(m){const t=document.getElementById('toast');document.getElementById('tmsg').textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// ─── QUIZ ───
+const QZ={
+  Math:[{q:"Solve: x² - 5x + 6 = 0 (IGCSE Maths)",o:["x=1,6","x=2,3","x=-2,-3","x=3,4"],a:1},{q:"What is the gradient of y = 3x - 7?",o:["7","−7","3","−3"],a:2},{q:"Expand: (x+3)(x−4)",o:["x²−x−12","x²+x−12","x²−x+12","x²+7x−12"],a:0}],
+  English:[{q:"'The wind howled like a wolf.' This is a...",o:["Metaphor","Simile","Personification","Alliteration"],a:1},{q:"What is the effect of a rhetorical question?",o:["Adds humour","Makes a direct statement","Engages reader, encourages reflection","Slows the pace"],a:2}],
+  Science:[{q:"What is the powerhouse of the cell?",o:["Nucleus","Ribosome","Mitochondria","Golgi body"],a:2},{q:"Which process releases energy in cells?",o:["Photosynthesis","Osmosis","Respiration","Diffusion"],a:2}],
+  History:[{q:"The Berlin Wall fell in...",o:["1987","1988","1989","1991"],a:2},{q:"Who led the Soviet Union during the Cuban Missile Crisis?",o:["Stalin","Brezhnev","Khrushchev","Gorbachev"],a:2}],
+  Physics:[{q:"What is the unit of electrical resistance?",o:["Volt","Ampere","Watt","Ohm"],a:3},{q:"Speed = Distance ÷ ?",o:["Mass","Time","Force","Power"],a:1}],
+};
+let cS='Math',cQ=0,cSc=0;
+function setSubj(s){cS=s;cQ=0;cSc=0;}
+function rQ(){
+  document.getElementById('qtitle').textContent=cS+' Practice';
+  const qs=QZ[cS]||QZ.Math,area=document.getElementById('qarea');
+  if(!area)return;
+  if(cQ>=qs.length){
+    const p=Math.round(cSc/qs.length*100);
+    area.innerHTML=`<div class="rcrd"><div class="scircle"><div class="scn" style="color:#f0e8ff">${p}%</div><div class="scl" style="color:rgba(240,232,255,0.5)">Score</div></div><h3>${p>=80?'🎉 Excellent!':p>=60?'👍 Good Work!':'💪 Keep Pushing!'}</h3><div class="aib" style="text-align:left;margin-bottom:18px"><div class="aib-ic">🤖</div><div><div class="aib-lbl">AI Report Sent</div><p>${p<60?'Gaps identified & flagged to Ms. Taylor.':'Strong session! Minor areas logged.'}</p></div></div><div style="display:flex;gap:9px"><button class="ba" style="flex:1" onclick="cQ=0;cSc=0;rQ()">Retry</button><button class="bg" style="flex:1" onclick="setS('subjects')">Back</button></div></div>`;
+    showT('📊 AI report sent to Ms. Taylor');return;
+  }
+  const q=qs[cQ],prog=cQ/qs.length*100;
+  area.innerHTML=`<div class="qpb"><div class="qpbf" style="width:${prog}%"></div></div><div class="qtag-row"><span style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--y);background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.22);padding:4px 12px;border-radius:5px">IGCSE · AI-Personalised</span><span style="font-size:12px;color:var(--mu);font-family:var(--fd);font-weight:700">${cQ+1} / ${qs.length}</span></div><div class="qbox"><p>${q.q}</p></div><div class="opts">${q.o.map((o,i)=>`<button class="opt" onclick="aQ(${i})"><span class="oltr">${'ABCD'[i]}</span>${o}</button>`).join('')}</div>`;
+}
+function aQ(i){
+  const q=(QZ[cS]||QZ.Math)[cQ];
+  document.querySelectorAll('.opt').forEach((b,j)=>{b.onclick=null;if(j===q.a)b.classList.add('cor');else if(j===i)b.classList.add('wrg');});
+  if(i===q.a)cSc++;
+  setTimeout(()=>{cQ++;rQ();},900);
+}
+// ─── AI QUESTION GENERATOR ───
+function genQs(){
+  const g=document.getElementById('gg').value,s=document.getElementById('gs').value,f=document.getElementById('gf').value||s,tgt=document.getElementById('gtgt').value;
+  const btn=document.getElementById('gbtn'),out=document.getElementById('gout');
+  btn.textContent='🤖 Generating...';btn.disabled=true;btn.style.opacity='.6';
+  out.innerHTML=`<div style="display:flex;align-items:center;gap:12px;background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:17px"><div style="width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--y);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0"></div><p style="font-size:13px;color:var(--mu)">Analysing ${g} ${s} curriculum for ${tgt}...</p></div>`;
+  setTimeout(()=>{
+    btn.textContent='✨ Generate with AI';btn.disabled=false;btn.style.opacity='1';
+    const lvls=['Foundation','Core','Extended'],qs=[`A student scores 42 on a ${g} ${s} mock. Calculate the percentage needed in Paper 2 to achieve a grade B overall.`,`Explain the concept of "${f}" as it appears in ${g} ${s}, with a worked example at Extended tier.`,`Create a 4-mark exam-style question on "${f}" for ${g} ${s}, including the mark scheme.`];
+    out.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:8px"><div class="td"></div>${g} · ${s} · ${tgt}</div>`+qs.map((q,i)=>`<div class="gqcrd"><div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><span style="background:var(--yg);color:var(--y);padding:2px 10px;border-radius:4px;font-size:10px;font-weight:700;font-family:var(--fd)">Q${i+1}</span><span class="dtag" style="background:${i===0?'rgba(57,255,77,0.07)':i===1?'rgba(255,180,0,0.07)':'rgba(255,59,92,0.07)'};color:${i===0?'#4ade80':i===1?'#fbbf24':'var(--r)'}">${lvls[i]}</span></div><p style="font-size:13px;color:rgba(238,240,255,0.65);line-height:1.7;margin-bottom:13px">${q}</p><div style="display:flex;gap:8px"><button class="ba" style="font-size:12px;padding:7px 14px" onclick="showT('Sent to ${tgt} 📤')">Send to Student</button><button class="bg" style="font-size:12px;padding:7px 12px">Edit</button></div></div>`).join('')+`<button class="ba" style="width:100%;padding:13px;font-size:14px;border-radius:10px;margin-top:4px" onclick="showT('All 3 questions sent to ${tgt}! ✦')">Send All Questions →</button>`;
+    showT(`✨ 3 ${g} ${s} questions ready`);
+  },2000);
+}
+</script>
+</body>
+</html>
