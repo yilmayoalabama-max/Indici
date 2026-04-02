@@ -74,14 +74,14 @@ background-size:28px 28px;
 .hero-grid{display:none;}
 
 .hero-cnt{position:relative;z-index:2;max-width:860px;}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(22,33,62,0.06);border:1px solid rgba(22,33,62,0.12);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:600;color:var(–navy);letter-spacing:.09em;text-transform:uppercase;margin-bottom:30px;opacity:0;animation:none;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(22,33,62,0.06);border:1px solid rgba(22,33,62,0.12);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:600;color:var(–navy);letter-spacing:.09em;text-transform:uppercase;margin-bottom:30px;opacity:1;animation:none;}
 .hero-tag-dot{width:6px;height:6px;background:var(–navy);border-radius:50%;}
 .hero-h{font-family:‘Syne’,sans-serif;font-weight:800;line-height:.9;letter-spacing:-.05em;margin-bottom:30px;}
-.hero-h .l1{display:block;font-size:clamp(52px,8vw,108px);opacity:0;transform:translateY(36px);animation:none;}
-.hero-h .l2{display:block;font-size:clamp(52px,8vw,108px);color:var(–navy);opacity:0;transform:translateY(36px);animation:none;}
-.hero-h .l3{display:block;font-size:clamp(52px,8vw,108px);-webkit-text-stroke:1.5px rgba(22,33,62,0.22);color:transparent;opacity:0;transform:translateY(36px);animation:none;}
-.hero-sub{font-size:17px;font-weight:300;color:var(–mid);max-width:460px;line-height:1.75;opacity:0;animation:none;margin-bottom:42px;}
-.hero-btns{display:flex;align-items:center;gap:18px;opacity:0;animation:none;}
+.hero-h .l1{display:block;font-size:clamp(52px,8vw,108px);opacity:1;transform:none;}
+.hero-h .l2{display:block;font-size:clamp(52px,8vw,108px);color:var(–navy);opacity:1;transform:none;}
+.hero-h .l3{display:block;font-size:clamp(52px,8vw,108px);-webkit-text-stroke:1.5px rgba(22,33,62,0.22);color:transparent;opacity:1;transform:none;}
+.hero-sub{font-size:17px;font-weight:300;color:var(–mid);max-width:460px;line-height:1.75;opacity:1;animation:none;margin-bottom:42px;}
+.hero-btns{display:flex;align-items:center;gap:18px;opacity:1;animation:none;}
 .btn-primary{background:var(–navy);color:#ffffff;border:none;padding:14px 36px;border-radius:100px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:14px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .4s,letter-spacing .3s;position:relative;overflow:hidden;}
 .btn-primary::after{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 60%);opacity:0;transition:opacity .3s;}
 .btn-primary:hover{transform:scale(1.06) translateY(-3px);box-shadow:0 10px 40px rgba(22,33,62,0.35);letter-spacing:.02em;}
@@ -109,7 +109,7 @@ text-shadow:
 filter:url(#crayonFilter);
 animation:crayonWiggle 3s ease-in-out infinite;
 transform-origin:center center;
-opacity:0;
+opacity:1;
 animation:crayonWiggle 3s 1.8s ease-in-out infinite;
 }
 @keyframes crayonWiggle{
@@ -508,13 +508,14 @@ background-size:28px 28px;
 
 /* Keyframes */
 @keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-.do-anim .hero-h .l1{animation:slideUp .9s .1s forwards!important;}
-.do-anim .hero-h .l2{animation:slideUp .9s .26s forwards!important;}
-.do-anim .hero-h .l3{animation:slideUp .9s .42s forwards!important;}
-.do-anim .hero-sub{animation:slideUp .9s .58s forwards!important;}
-.do-anim .hero-btns{animation:slideUp .9s .74s forwards!important;}
-.do-anim .hero-tag{animation:slideUp .8s .05s forwards!important;}
-.do-anim .crayon-eq{animation:slideUp .9s .44s forwards, crayonWiggle 3s 1.8s ease-in-out infinite!important;}
+.do-anim .hero-h .l1{animation:heroFade .7s .1s both!important;}
+.do-anim .hero-h .l2{animation:heroFade .7s .25s both!important;}
+.do-anim .hero-h .l3{animation:heroFade .7s .4s both!important;}
+.do-anim .hero-sub{animation:heroFade .7s .55s both!important;}
+.do-anim .hero-btns{animation:heroFade .7s .7s both!important;}
+.do-anim .hero-tag{animation:heroFade .6s .05s both!important;}
+.do-anim .crayon-eq{animation:heroFade .7s .35s both, crayonWiggle 3s 1.8s ease-in-out infinite!important;}
+@keyframes heroFade{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(22,33,62,0.4)}60%{box-shadow:0 0 0 7px rgba(22,33,62,0)}}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
